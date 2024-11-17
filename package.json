@@ -1,0 +1,25 @@
+{
+  "name": "cmdstr-http",
+  "main": "dist/index.js",
+  "version": "1.0.0",
+  "description": "Build out your HTTP wrappers with a modular approach.",
+  "author": {
+    "name": "Robert Snedeker",
+    "email": "rsnedeker20@gmail.com",
+    "url": "https://robertsnedeker.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.5.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.5.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "files": [
+    "dist"
+  ]
+}
