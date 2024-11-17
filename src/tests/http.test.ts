@@ -4,7 +4,9 @@ type Modules = {
     random: Random
 }
 
-class Random extends HttpModule<Modules> {
+abstract class BaseModule extends HttpModule<Modules> { }
+
+class Random extends BaseModule {
     async user(): Promise<RandomUserResponse> {
         const r = await this.http.request('https://randomuser.me/api/');
 
