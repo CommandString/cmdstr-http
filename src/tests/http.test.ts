@@ -1,49 +1,12 @@
-import {Http, HttpModule} from "../index";
+import {
+    createModule,
+    Http,
+    HttpModule
+} from "../index";
 
-type Modules = {
-    random: Random
-}
-
-abstract class BaseModule extends HttpModule<Modules> { }
-
-class Random extends BaseModule {
-    async user(): Promise<RandomUserResponse> {
-        const r = await this.http.request('https://randomuser.me/api/');
-
-        if (!r.ok) {
-            throw new Error('Request Failed!');
-        }
-
-        return r.json() as unknown as RandomUserResponse;
-    }
-}
-
-type TestHttp = Http<Modules>
-
-let http: TestHttp;
-
-test('Http.create', () => {
-    http = Http.create<Modules>({
-        modules: {
-            random: Random.moduleInitializer()
-        }
-    });
-
-    expect(http).toBeInstanceOf(Http);
-});
-
-test('Http.m', () => {
-    expect(http.m('random')).toBeInstanceOf(Random);
-});
-
-test('Http.request', async () => {
-    let r = await http.m('random').user();
-
-    expect(r).toHaveProperty('results');
-    expect(r).toHaveProperty('info');
-    expect(r.results).toBeDefined();
-    expect(r.results[0]).toHaveProperty('name')
-});
+//#####################//
+//   UNIT TEST TYPES   //
+//#####################//
 
 type RandomUser = {
     name: {
@@ -66,3 +29,63 @@ type RandomUserResponse = {
     info: RandomUserInfo,
     // ...
 }
+
+type TestModules = {
+    random: Random
+}
+
+abstract class TestModule extends HttpModule<TestModules> { }
+
+class Random extends TestModule {
+    async user() {
+        const [r, getUser] = await this.http
+            .request<
+                undefined,
+                RandomUserResponse
+            >({
+                method: 'GET',
+                url: 'https://randomuser.me/api/',
+                onError: (r) => {
+                    console.error(`Request failed ${r.status} | ${r.statusText}`);
+                },
+                decodeBody: 'json'
+            })
+
+        return await getUser();
+    }
+}
+
+type TestHttp = Http<TestModules>
+
+let http: TestHttp;
+
+//##################//
+//   PROPER USAGE   //
+//##################//
+
+describe('proper usage', () => {
+    test('Http.create', () => {
+        http = Http.createWithModules<TestModules>({
+            modules: {
+                random: createModule(Random)
+            }
+        });
+
+        expect(http).toBeInstanceOf(Http);
+    });
+
+    test('Http.m', () => {
+        expect(http.m('random')).toBeInstanceOf(Random);
+    });
+
+    test('Http.request', async () => {
+        const { random } = http.modules();
+
+        let r = await random.user();
+
+        expect(r).toHaveProperty('results');
+        expect(r).toHaveProperty('info');
+        expect(r.results).toBeDefined();
+        expect(r.results[0]).toHaveProperty('name')
+    });
+});

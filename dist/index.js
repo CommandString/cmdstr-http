@@ -1,45 +1,20 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HttpModule = exports.Http = void 0;
-class Http {
-    constructor() {
-        this.modules = null;
-    }
-    m(module) {
-        return this.modules[module];
-    }
-    request(url, init) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield fetch(url, init);
-        });
-    }
-    static create(config) {
-        let http = new Http();
-        let createdModules = {};
-        for (const [name, module] of Object.entries(config.modules)) {
-            // @ts-expect-error - This is an implementation of ApiModule
-            createdModules[name] = module(http);
-        }
-        http.modules = createdModules;
-        return http;
-    }
-}
-exports.Http = Http;
-class HttpModule {
-    constructor(http) {
-        this.http = http;
-    }
-    static moduleInitializer() {
-        return (http) => new this(http);
-    }
-}
-exports.HttpModule = HttpModule;
+__exportStar(require("./lib/Http"), exports);
+__exportStar(require("./lib/Errors"), exports);
+__exportStar(require("./lib/formToJson"), exports);
+__exportStar(require("./lib/BodyDecoders"), exports);
