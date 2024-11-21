@@ -80,10 +80,10 @@ export class Http<Modules extends HttpModuleMap> {
         RequestBody extends any = undefined,
         ResponseBody extends any = undefined,
         ResponseBodyDecoder = ResponseBody extends undefined ? null : () => Promise<ResponseBody>
-    >(config: HttpRequestConfig<RequestBody, ResponseBody>): Promise<[
-        Response,
-        ResponseBodyDecoder
-    ]> {
+    >(config: HttpRequestConfig<RequestBody, ResponseBody>): Promise<{
+        response: Response,
+        getData: ResponseBodyDecoder
+    }> {
         let headers = new Headers(config.headers);
         let body = undefined;
 
@@ -133,7 +133,10 @@ export class Http<Modules extends HttpModuleMap> {
             decoder = BodyDecoders[config.decodeBody];
         }
 
-        return [r, (decoder ? () => decoder(r) as Promise<ResponseBody> : null) as ResponseBodyDecoder];
+        return {
+            response: r,
+            getData: (decoder ? () => decoder(r) as Promise<ResponseBody> : null) as ResponseBodyDecoder
+        };
     }
 
     static createWithModules<Modules extends HttpModuleMap>(config: {

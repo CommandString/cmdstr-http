@@ -38,7 +38,7 @@ abstract class TestModule extends HttpModule<TestModules> { }
 
 class Random extends TestModule {
     async user() {
-        const [r, getUser] = await this.http
+        const { getData } = await this.http
             .request<
                 undefined,
                 RandomUserResponse
@@ -51,7 +51,7 @@ class Random extends TestModule {
                 decodeBody: 'json'
             })
 
-        return await getUser();
+        return await getData();
     }
 }
 

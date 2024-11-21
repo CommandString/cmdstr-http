@@ -1,7 +1,7 @@
 {
   "name": "cmdstr-http",
   "main": "dist/index.js",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Build out your HTTP wrappers with a modular approach.",
   "author": {
     "name": "Robert Snedeker",
