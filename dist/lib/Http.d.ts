@@ -39,10 +39,10 @@ export declare class Http<Modules extends HttpModuleMap> {
     /**
      * @throws {HttpError|HttpRequestError}
      */
-    request<RequestBody extends any = undefined, ResponseBody extends any = undefined, ResponseBodyDecoder = ResponseBody extends undefined ? null : () => Promise<ResponseBody>>(config: HttpRequestConfig<RequestBody, ResponseBody>): Promise<[
-        Response,
-        ResponseBodyDecoder
-    ]>;
+    request<RequestBody extends any = undefined, ResponseBody extends any = undefined, ResponseBodyDecoder = ResponseBody extends undefined ? null : () => Promise<ResponseBody>>(config: HttpRequestConfig<RequestBody, ResponseBody>): Promise<{
+        response: Response;
+        getData: ResponseBodyDecoder;
+    }>;
     static createWithModules<Modules extends HttpModuleMap>(config: {
         modules: Record<keyof Modules, CreateModule<Modules[keyof Modules]>>;
     }): Http<Modules>;

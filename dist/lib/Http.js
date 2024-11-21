@@ -77,7 +77,10 @@ class Http {
             if (config.decodeBody && typeof config.decodeBody === 'string') {
                 decoder = BodyDecoders_1.BodyDecoders[config.decodeBody];
             }
-            return [r, (decoder ? () => decoder(r) : null)];
+            return {
+                response: r,
+                getData: (decoder ? () => decoder(r) : null)
+            };
         });
     }
     static createWithModules(config) {
